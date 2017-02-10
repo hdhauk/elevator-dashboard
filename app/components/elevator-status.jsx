@@ -27,7 +27,7 @@ export default class Elevator extends React.Component{
 
 
   componentDidMount(){
-    setInterval(this.fetchStatus, 1000)
+    setInterval(this.fetchStatus, 500)
 
 }
 
@@ -70,6 +70,39 @@ fetchStatus = () => {
     });
   }
 
+  sendUpCommand = (e) => {
+    console.log(e)
+    fetch(`http://${this.props.address}/update/button`,{
+      method: 'POST',
+      header:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({
+        Floor: e,
+        Dir: 'up',
+        Status: 'unassigned'
+      })
+    })
+  }
+
+  sendDownCommand = (e) => {
+    console.log(e)
+    fetch(`http://${this.props.address}/update/button`,{
+      method: 'POST',
+      header:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({
+        Floor: e,
+        Dir: 'down',
+        Status: 'unassigned'
+      })
+    })
+  }
+
+
   render(){
     return (
       <div style={{padding:20, borderColor:"black", borderWidth:5, flex:1}}>
@@ -81,19 +114,19 @@ fetchStatus = () => {
           <h4><Label>Hall Up buttons</Label></h4>
           <ButtonToolbar>
             <ButtonGroup>
-              <Button bsStyle={this.state.up[0]}>0</Button>
-              <Button bsStyle={this.state.up[1]}>1</Button>
-              <Button bsStyle={this.state.up[2]}>2</Button>
-              <Button bsStyle="link"></Button>
+              <Button bsStyle={this.state.up[0]} onClick={this.sendUpCommand.bind(this,0)} key={1} >0</Button>
+              <Button bsStyle={this.state.up[1]} onClick={this.sendUpCommand.bind(this,1)} key={2} >1</Button>
+              <Button bsStyle={this.state.up[2]} onClick={this.sendUpCommand.bind(this,2)} key={3} >2</Button>
+              <Button bsStyle="link">-</Button>
             </ButtonGroup>
           </ButtonToolbar>
           <h4><Label>Hall Down buttons</Label></h4>
           <span style={{width:2}}></span><ButtonToolbar>
             <ButtonGroup>
-              <Button bsStyle="link"></Button>
-              <Button bsStyle={this.state.down[1]}>1</Button>
-              <Button bsStyle={this.state.down[2]}>2</Button>
-              <Button bsStyle={this.state.down[3]}>3</Button>
+              <Button bsStyle="link">-</Button>
+              <Button bsStyle={this.state.down[1]} onClick={this.sendDownCommand.bind(this,1)} key={4} >1</Button>
+              <Button bsStyle={this.state.down[2]} onClick={this.sendDownCommand.bind(this,2)} key={5} >2</Button>
+              <Button bsStyle={this.state.down[3]} onClick={this.sendDownCommand.bind(this,3)} key={6} >3</Button>
             </ButtonGroup>
           </ButtonToolbar>
         </div>
